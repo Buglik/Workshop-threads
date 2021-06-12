@@ -25,9 +25,7 @@ public:
     void run();
     void getIntoWorkshop();
     void print(std::string text);
-    void eat();
     void wait();
-    void think();
     float getProgress() const;
     State getState() const;
     std::string getName() const;
