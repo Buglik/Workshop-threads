@@ -7,12 +7,19 @@ void Horn::wait()
     {
         cv.wait(lock);
     }
-    go = true;
+    // go = false;
 }
 
-void Horn::letEveryoneKnow()
+void Horn::letEveryoneKnowOut()
 {
     std::unique_lock<std::mutex> lock(mutex);
     go = true;
+    cv.notify_all();
+}
+
+void Horn::letEveryoneKnowIn()
+{
+    std::unique_lock<std::mutex> lock(mutex);
+    go = false;
     cv.notify_all();
 }

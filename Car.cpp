@@ -11,29 +11,66 @@
 #include <mutex>
 #include "Random.hpp"
 
-Car::Car(int id, std::string n, WorkshopSetup &s, float speedRatio) : id(id), name(n), setup(s), speedRatio(speedRatio), progress(0.0f), state(State::waiting), thread(&Car::run, this)
+Car::Car(int id, std::string n, Workshop &ws) : id(id), name(n), workshop(ws), progress(0.0f), spaceId(-1), state(State::waiting), thread(&Car::run, this)
 {
+    std::cout << "ZROBILEM Cara!" << std::endl;
 }
 
 Car::~Car()
 {
+    print("Umiera :(");
     thread.join();
 }
 
 void Car::run()
 {
-    // try to get space
-    // if no space
-    //wait for horn
-    // try to get one employee
-    // random type of repair
-    // if hard one
-    //free the one employee
-    //wait for parts
-    //get two employees
-    //repair
-    // else repair (employee got earlier)
-    // go out with horn and die
+
+    std::cout << "Car " << id << "sobie zyje" << std::endl;
+
+    do
+    { // try to get space
+        for (auto &space : workshop.getSpaces())
+        {
+            if (space->getMutex().try_lock())
+            {
+                workshop.getSetup().hornSound.letEveryoneKnowIn();
+                spaceId = space->getId();
+                print("zablokowalem" + std::to_string(spaceId));
+                state = State::inPosition;
+                break;
+            }
+        }
+        // if no space
+        //wait for horn
+        if (spaceId == -1)
+        {
+            print("Czekam na horna");
+            workshop.getSetup().hornSound.wait();
+            print("uslyszalem horna");
+        }
+    } while (state == State::waiting);
+    if (state == State::inPosition)
+    {
+        // try to get one employee
+        // random type of repair
+        // if hard one
+        //free the one employee
+        //wait for parts
+        //get two employees
+        //repair
+        // else repair (employee got earlier)
+
+        wait();
+        print("puszczam stanowisko" + std::to_string(spaceId));
+        workshop.getSpaces().at(spaceId)->getMutex().unlock();
+        state = State::waiting;
+        spaceId = -1;
+        print("uzywam horna");
+        // go out with horn
+        workshop.getSetup().hornSound.letEveryoneKnowOut();
+    }
+
+    //and die
 }
 
 void Car::wait()

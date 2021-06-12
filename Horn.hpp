@@ -11,5 +11,6 @@ private:
 
 public:
     void wait();
-    void letEveryoneKnow();
+    void letEveryoneKnowOut();
+    void letEveryoneKnowIn();
 };

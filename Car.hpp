@@ -4,22 +4,22 @@
 #include <atomic>
 #include <string>
 #include "State.hpp"
-#include "WorkshopSetup.hpp"
+#include "Workshop.hpp"
 
 class Car
 {
 private:
     int id;
     std::string name;
-    WorkshopSetup &setup;
-
+    Workshop &workshop;
     std::thread thread;
     std::atomic<float> progress;
     std::atomic<State> state;
+    std::atomic<int> spaceId;
     float speedRatio;
 
 public:
-    Car(int id, std::string n, WorkshopSetup &s, float speedRatio);
+    Car(int id, std::string n, Workshop &ws);
     ~Car();
 
     void run();
