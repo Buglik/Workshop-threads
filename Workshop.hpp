@@ -1,6 +1,7 @@
 #pragma once
 #include "WorkshopSetup.hpp"
 #include "Space.hpp"
+#include "Mechanic.hpp"
 #include <vector>
 
 class Workshop
@@ -14,11 +15,15 @@ private:
     int amount;
 
     std::vector<Space *> spaceV;
+    std::vector<Mechanic *> mechanicV;
 
 public:
     void prepareSpaces();
+    void prepareMechanics();
     std::vector<Space *> &getSpaces();
+    std::vector<Mechanic *> &getMechanics();
     WorkshopSetup &getSetup();
+    std::vector<int> assignMechanics(int n);
     bool getIsOpen() const;
     void open();
     void close();
