@@ -72,6 +72,7 @@ void Car::getIntoWorkshop()
 
 void Car::leaveWorkshop()
 {
+    print("FINITO");
     print("puszczam stanowisko" + std::to_string(spaceId));
     workshop.getSpaces().at(spaceId)->getMutex().unlock();
     state = State::waiting;
@@ -84,6 +85,8 @@ void Car::leaveWorkshop()
 void Car::repairProcess()
 {
     // try to get one employee
+    //check cv if any free
+    //check cv if no priority
     manager.getMutex().lock();
     Mechanic *mechanicForCheckup = manager.askForEmployee();
     manager.getMutex().unlock();
@@ -92,15 +95,38 @@ void Car::repairProcess()
     print("biore pracownika" + std::to_string(mechanicForCheckup->getId()));
 
     // random type of repair
-    // int repairType = Random().randomInt(0, 100);
-    int repairType = 1;
+    int repairType = Random().randomInt(0, 100);
+    // int repairType = 2;
     if (repairType % 2 == 0) //hard one
     {
         // if hard one
+        print("hard one");
         //free the one employee
+        mechanicForCheckup->getMutex().unlock();
+        std::cout << "Mechanik " << mechanicForCheckup->getId() << " zamowil czesci" << std::endl;
         //wait for parts
+        state = State::waitingForParts;
+        wait();
+
+        print("oczekuje na naprawe (czesci juz sa)");
         //get two employees
+        //check if if any free
+        manager.getMutex().lock();
+        std::vector<Mechanic *> mechanicsForHardJob = manager.askForTwoEmployees();
+        print("zarezerwowal" + std::to_string(mechanicsForHardJob.at(0)->getId()) + " oraz " + std::to_string(mechanicsForHardJob.at(1)->getId()));
+        std::cout << std::to_string(mechanicsForHardJob.size()) << std::endl;
+        manager.getMutex().unlock();
         //repair
+        state = State::repairing;
+        print("naprawia sie");
+        wait();
+        print("juz sie naprawil");
+        for (auto &m : mechanicsForHardJob)
+        {
+            m->setIsBusy(false);
+            m->getMutex().unlock();
+            print("zwolnil" + std::to_string(m->getId()));
+        }
     }
     else
     {
@@ -133,7 +159,7 @@ void Car::wait()
 void Car::print(std::string text)
 {
     // std::ostringstream s1;
-    std::cout << name << text << std::endl;
+    std::cout << name << " " << text << std::endl;
 }
 
 State Car::getState() const

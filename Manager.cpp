@@ -25,9 +25,21 @@ Mechanic *Manager::askForEmployee()
     }
 }
 
-void Manager::freeEmployee(Mechanic *mechanic)
+std::vector<Mechanic *> Manager::askForTwoEmployees()
 {
-    std::cout << "Manager zwalnia mechanika" << std::to_string(mechanic->getId()) << std::endl;
-    mechanic->setIsBusy(false);
-    mechanic->getMutex().unlock();
+    std::vector<Mechanic *> twoWorkers;
+    while (twoWorkers.size() < 2)
+    {
+        for (auto &worker : workshop.getMechanics())
+        {
+            if (worker->getMutex().try_lock())
+            {
+                worker->setIsBusy(true);
+                twoWorkers.push_back(worker);
+            }
+            if (twoWorkers.size() == 2)
+                break;
+        }
+    }
+    return twoWorkers;
 }

@@ -13,13 +13,13 @@
 
 void start()
 {
-    Workshop workshop(2);
+    Workshop workshop(3);
     Manager manager(workshop);
 
     std::vector<Car *> carV;
 
     //for testing purposes
-    for (size_t i = 0; i < 5; i++)
+    for (size_t i = 0; i < 15; i++)
     {
         std::string name = "Car ";
         name += std::to_string(i);
