@@ -3,7 +3,7 @@
 
 Manager::Manager(Workshop &workshop) : workshop(workshop)
 {
-    std::cout << "ZROBILEM Menagera!" << std::endl;
+    // std::cout << "ZROBILEM Menagera!" << std::endl;
 }
 
 Mechanic *Manager::askForEmployee()
@@ -38,7 +38,10 @@ std::vector<Mechanic *> Manager::askForTwoEmployees()
                 twoWorkers.push_back(worker);
             }
             if (twoWorkers.size() == 2)
+            {
+                workshop.getSetup().priority.decPriority();
                 break;
+            }
         }
     }
     return twoWorkers;

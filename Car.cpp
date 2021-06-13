@@ -13,7 +13,7 @@
 
 Car::Car(int id, std::string n, Workshop &ws, Manager &m) : id(id), name(n), workshop(ws), manager(m), progress(0.0f), spaceId(-1), state(State::waiting), thread(&Car::run, this)
 {
-    std::cout << "ZROBILEM Cara!" << std::endl;
+    // std::cout << "ZROBILEM Cara!" << std::endl;
 }
 
 Car::~Car()
@@ -25,7 +25,7 @@ Car::~Car()
 void Car::run()
 {
 
-    std::cout << "Car " << id << "sobie zyje" << std::endl;
+    // std::cout << "Car " << id << "sobie zyje" << std::endl;
     wait();
     getIntoWorkshop();
     wait();
@@ -54,7 +54,7 @@ void Car::getIntoWorkshop()
             {
                 workshop.getSetup().hornSound.letEveryoneKnowIn();
                 spaceId = space->getId();
-                print("zablokowalem" + std::to_string(spaceId));
+                print("zablokowalem stanowisko " + std::to_string(spaceId));
                 state = State::inPosition;
                 break;
             }
@@ -63,9 +63,9 @@ void Car::getIntoWorkshop()
         //wait for horn
         if (spaceId == -1)
         {
-            print("Czekam na horna");
+            // print("Czekam na horna");
             workshop.getSetup().hornSound.wait();
-            print("uslyszalem horna");
+            // print("uslyszalem horna");
         }
     } while (state == State::waiting);
 }
@@ -73,11 +73,11 @@ void Car::getIntoWorkshop()
 void Car::leaveWorkshop()
 {
     print("FINITO");
-    print("puszczam stanowisko" + std::to_string(spaceId));
+    print("puszczam stanowisko " + std::to_string(spaceId));
     workshop.getSpaces().at(spaceId)->getMutex().unlock();
     state = State::waiting;
     spaceId = -1;
-    print("uzywam horna");
+    // print("uzywam horna");
     // go out with horn
     workshop.getSetup().hornSound.letEveryoneKnowOut();
 }
@@ -87,6 +87,10 @@ void Car::repairProcess()
     // try to get one employee
     //check cv if any free
     //check cv if no priority
+    print("checking priority ...");
+    workshop.getSetup().priority.wait();
+    print("... there is no priority");
+
     manager.getMutex().lock();
     Mechanic *mechanicForCheckup = manager.askForEmployee();
     manager.getMutex().unlock();
@@ -95,8 +99,8 @@ void Car::repairProcess()
     print("biore pracownika" + std::to_string(mechanicForCheckup->getId()));
 
     // random type of repair
-    int repairType = Random().randomInt(0, 100);
-    // int repairType = 2;
+    // int repairType = Random().randomInt(0, 100);
+    int repairType = 2;
     if (repairType % 2 == 0) //hard one
     {
         // if hard one
@@ -109,6 +113,8 @@ void Car::repairProcess()
         wait();
 
         print("oczekuje na naprawe (czesci juz sa)");
+        //let know cv that there is priority
+        workshop.getSetup().priority.incPriority();
         //get two employees
         //check if if any free
         manager.getMutex().lock();

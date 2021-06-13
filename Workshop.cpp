@@ -3,7 +3,7 @@
 Workshop::Workshop(int n) : amount(n)
 {
     prepareSpaces();
-    prepareMechanics(); //TODO
+    prepareMechanics();
 }
 
 void Workshop::prepareSpaces()

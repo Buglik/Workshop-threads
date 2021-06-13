@@ -19,7 +19,7 @@ void start()
     std::vector<Car *> carV;
 
     //for testing purposes
-    for (size_t i = 0; i < 15; i++)
+    for (size_t i = 0; i < 10; i++)
     {
         std::string name = "Car ";
         name += std::to_string(i);

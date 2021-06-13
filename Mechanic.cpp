@@ -3,5 +3,5 @@
 
 Mechanic::Mechanic(int id) : id(id), isBusy(false)
 {
-    std::cout << "ZROBILEM Mechanic!" << std::endl;
+    // std::cout << "ZROBILEM Mechanic!" << std::endl;
 }
