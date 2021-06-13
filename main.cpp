@@ -13,7 +13,7 @@
 
 void start()
 {
-    Workshop workshop(3);
+    Workshop workshop(4);
     Manager manager(workshop);
 
     std::vector<Car *> carV;
