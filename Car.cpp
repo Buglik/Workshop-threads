@@ -26,7 +26,26 @@ void Car::run()
 {
 
     std::cout << "Car " << id << "sobie zyje" << std::endl;
+    wait();
+    getIntoWorkshop();
+    wait();
+    repairProcess();
+    leaveWorkshop();
 
+    // try to get one employee
+    // random type of repair
+    // if hard one
+    //free the one employee
+    //wait for parts
+    //get two employees
+    //repair
+    // else repair (employee got earlier)
+
+    //and die
+}
+
+void Car::getIntoWorkshop()
+{
     do
     { // try to get space
         for (auto &space : workshop.getSpaces())
@@ -49,28 +68,38 @@ void Car::run()
             print("uslyszalem horna");
         }
     } while (state == State::waiting);
-    if (state == State::inPosition)
+}
+
+void Car::leaveWorkshop()
+{
+    print("puszczam stanowisko" + std::to_string(spaceId));
+    workshop.getSpaces().at(spaceId)->getMutex().unlock();
+    state = State::waiting;
+    spaceId = -1;
+    print("uzywam horna");
+    // go out with horn
+    workshop.getSetup().hornSound.letEveryoneKnowOut();
+}
+
+void Car::repairProcess()
+{
+    // try to get one employee
+    // random type of repair
+    int repairType = Random().randomInt(0, 100);
+    if (repairType % 2 == 0) //hard one
     {
-        // try to get one employee
-        // random type of repair
-        // if hard one
-        //free the one employee
-        //wait for parts
-        //get two employees
-        //repair
-        // else repair (employee got earlier)
-
-        wait();
-        print("puszczam stanowisko" + std::to_string(spaceId));
-        workshop.getSpaces().at(spaceId)->getMutex().unlock();
-        state = State::waiting;
-        spaceId = -1;
-        print("uzywam horna");
-        // go out with horn
-        workshop.getSetup().hornSound.letEveryoneKnowOut();
     }
-
-    //and die
+    else
+    {
+        state = State::repairing;
+        wait();
+    }
+    // if hard one
+    //free the one employee
+    //wait for parts
+    //get two employees
+    //repair
+    // else repair (employee got earlier)
 }
 
 void Car::wait()

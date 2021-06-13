@@ -24,6 +24,8 @@ public:
 
     void run();
     void getIntoWorkshop();
+    void leaveWorkshop();
+    void repairProcess();
     void print(std::string text);
     void wait();
     float getProgress() const;
