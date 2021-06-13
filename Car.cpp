@@ -11,7 +11,7 @@
 #include <mutex>
 #include "Random.hpp"
 
-Car::Car(int id, std::string n, Workshop &ws) : id(id), name(n), workshop(ws), progress(0.0f), spaceId(-1), state(State::waiting), thread(&Car::run, this)
+Car::Car(int id, std::string n, Workshop &ws, Manager &m) : id(id), name(n), workshop(ws), manager(m), progress(0.0f), spaceId(-1), state(State::waiting), thread(&Car::run, this)
 {
     std::cout << "ZROBILEM Cara!" << std::endl;
 }
@@ -84,22 +84,37 @@ void Car::leaveWorkshop()
 void Car::repairProcess()
 {
     // try to get one employee
+    manager.getMutex().lock();
+    Mechanic *mechanicForCheckup = manager.askForEmployee();
+    manager.getMutex().unlock();
+    // currentMechanicsIds = workshop.assignMechanics(1);
+
+    print("biore pracownika" + std::to_string(mechanicForCheckup->getId()));
+
     // random type of repair
-    int repairType = Random().randomInt(0, 100);
+    // int repairType = Random().randomInt(0, 100);
+    int repairType = 1;
     if (repairType % 2 == 0) //hard one
     {
+        // if hard one
+        //free the one employee
+        //wait for parts
+        //get two employees
+        //repair
     }
     else
     {
+        // else repair (employee got earlier)
         state = State::repairing;
+        print("naprawiam sie");
         wait();
+        print("juz sie naprawilem");
+        // workshop.getMechanics().at(currentMechanicsIds.at(0))->getMutex().unlock();
+        // workshop.getMechanics().at(currentMechanicsIds.at(0))->setIsBusy(false);
+        mechanicForCheckup->setIsBusy(false);
+        std::cout << "Mechanik " << mechanicForCheckup->getId() << " skonczyl robote" << std::endl;
+        mechanicForCheckup->getMutex().unlock();
     }
-    // if hard one
-    //free the one employee
-    //wait for parts
-    //get two employees
-    //repair
-    // else repair (employee got earlier)
 }
 
 void Car::wait()

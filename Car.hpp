@@ -5,6 +5,7 @@
 #include <string>
 #include "State.hpp"
 #include "Workshop.hpp"
+#include "Manager.hpp"
 
 class Car
 {
@@ -12,14 +13,16 @@ private:
     int id;
     std::string name;
     Workshop &workshop;
+    Manager &manager;
     std::thread thread;
     std::atomic<float> progress;
     std::atomic<State> state;
     std::atomic<int> spaceId;
+    std::vector<int> currentMechanicsIds;
     float speedRatio;
 
 public:
-    Car(int id, std::string n, Workshop &ws);
+    Car(int id, std::string n, Workshop &ws, Manager &m);
     ~Car();
 
     void run();
