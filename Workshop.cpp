@@ -4,6 +4,7 @@ Workshop::Workshop(int n) : amount(n)
 {
     prepareSpaces();
     prepareMechanics();
+    setup.anyAvaible.setCount(n);
 }
 
 void Workshop::prepareSpaces()

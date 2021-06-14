@@ -78,7 +78,6 @@ void Car::repairProcess()
     //check cv if any free
     print("checking if there are any mechanics ...");
     workshop.getSetup().anyAvaible.wait();
-    print(std::to_string(workshop.getSetup().anyAvaible.getCounter()));
     print("there is a mechanic");
     //check cv if no priority
     print("checking priority ...");
@@ -105,7 +104,6 @@ void Car::repairProcess()
         mechanicForCheckup->getMutex().unlock();
         workshop.getSpaces().at(spaceId)->removeMechanics();
         workshop.getSetup().anyAvaible.incAnyAvaible();
-        print(std::to_string(workshop.getSetup().anyAvaible.getCounter()));
         //wait for parts
         state = State::waitingForParts;
         wait();
@@ -115,7 +113,6 @@ void Car::repairProcess()
         workshop.getSetup().priority.incPriority();
         //get two employees
         //check if if any free
-        print(std::to_string(workshop.getSetup().anyAvaible.getCounter()));
         workshop.getSetup().anyAvaible.wait();
         manager.getMutex().lock();
         std::vector<Mechanic *> mechanicsForHardJob = manager.askForTwoEmployees(spaceId);

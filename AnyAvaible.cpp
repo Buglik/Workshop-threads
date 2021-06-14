@@ -23,3 +23,9 @@ void AnyAvaible::decAnyAvaible()
     counter--;
     cv.notify_all();
 }
+
+void AnyAvaible::setCount(int n)
+{
+    std::unique_lock<std::mutex> lock(mutex);
+    counter = n;
+}
