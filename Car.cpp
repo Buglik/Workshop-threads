@@ -61,8 +61,11 @@ void Car::getIntoWorkshop()
 
 void Car::leaveWorkshop()
 {
-    print("FINITO");
-    state = State::ready;
+
+    manager.getMutex().lock();
+    //getting payment
+    manager.getMutex().unlock();
+
     print("puszczam stanowisko " + std::to_string(spaceId));
     workshop.getSpaces().at(spaceId)->resetSpace();
     workshop.getSpaces().at(spaceId)->getMutex().unlock();
@@ -138,13 +141,10 @@ void Car::repairProcess()
         print("naprawiam sie");
         wait();
         print("juz sie naprawilem");
-        // mechanicForCheckup->setIsBusy(false);
-        state = State::ready;
-        manager.getMutex().lock();
         mechanicForCheckup->getMutex().unlock();
         workshop.getSetup().anyAvaible.incAnyAvaible();
         workshop.getSpaces().at(spaceId)->removeMechanics();
-        manager.getMutex().unlock();
+        state = State::ready;
     }
 }
 
