@@ -9,7 +9,7 @@
 #include "Workshop.hpp"
 #include "Car.hpp"
 #include "Manager.hpp"
-// #include "UI.hpp"
+#include "UI.hpp"
 
 void start()
 {
@@ -19,18 +19,17 @@ void start()
     std::vector<Car *> carV;
 
     //for testing purposes
-    for (size_t i = 0; i < 10; i++)
+    for (size_t i = 0; i < 5; i++)
     {
         std::string name = "Car ";
         name += std::to_string(i);
         carV.push_back(new Car(i, name, workshop, manager));
     }
 
-    // UI ui(table.getPhilosophers(), table, table.getForks());
-    workshop.open();
+    UI ui(carV, workshop);
+
     while (workshop.getIsOpen())
     {
-        // generating new cars
     };
 }
 

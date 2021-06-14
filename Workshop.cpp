@@ -66,6 +66,7 @@ bool Workshop::getIsOpen() const
 void Workshop::open()
 {
     isOpen = true;
+    setup.hornSound.letEveryoneKnowOut();
 }
 
 void Workshop::close()

@@ -17,7 +17,7 @@ Mechanic *Manager::askForEmployee()
             {
                 worker->setIsBusy(true);
                 workshop.getSetup().anyAvaible.decAnyAvaible();
-                std::cout << "Manager przypisuje mechanika" << std::to_string(worker->getId()) << std::endl;
+                // std::cout << "Manager przypisuje mechanika" << std::to_string(worker->getId()) << std::endl;
 
                 return worker;
                 // mechanicsIds.push_back(worker->getId());

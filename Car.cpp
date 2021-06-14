@@ -25,6 +25,7 @@ Car::~Car()
 void Car::run()
 {
 
+    workshop.getSetup().hornSound.wait();
     // std::cout << "Car " << id << "sobie zyje" << std::endl;
     wait();
     getIntoWorkshop();
@@ -113,7 +114,7 @@ void Car::repairProcess()
         mechanicForCheckup->getMutex().unlock();
         // print(std::to_string(workshop.getSetup().anyAvaible.getCounter()));
         workshop.getSetup().anyAvaible.incAnyAvaible();
-        std::cout << "Mechanik " << mechanicForCheckup->getId() << " zamowil czesci" << std::endl;
+        // std::cout << "Mechanik " << mechanicForCheckup->getId() << " zamowil czesci" << std::endl;
         print(std::to_string(workshop.getSetup().anyAvaible.getCounter()));
         //wait for parts
         state = State::waitingForParts;
@@ -154,7 +155,7 @@ void Car::repairProcess()
         // workshop.getMechanics().at(currentMechanicsIds.at(0))->getMutex().unlock();
         // workshop.getMechanics().at(currentMechanicsIds.at(0))->setIsBusy(false);
         mechanicForCheckup->setIsBusy(false);
-        std::cout << "Mechanik " << mechanicForCheckup->getId() << " skonczyl robote" << std::endl;
+        // std::cout << "Mechanik " << mechanicForCheckup->getId() << " skonczyl robote" << std::endl;
         mechanicForCheckup->getMutex().unlock();
         workshop.getSetup().anyAvaible.incAnyAvaible();
     }
@@ -176,7 +177,7 @@ void Car::wait()
 void Car::print(std::string text)
 {
     // std::ostringstream s1;
-    std::cout << name << " " << text << std::endl;
+    // std::cout << name << " " << text << std::endl;
 }
 
 State Car::getState() const
