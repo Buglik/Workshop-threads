@@ -8,5 +8,6 @@ enum class State
     waitingForParts,
     waitingForMechanics,
     repairing,
+    repairing_H,
     ready
 };

@@ -121,7 +121,7 @@ void Car::repairProcess()
         std::vector<Mechanic *> mechanicsForHardJob = manager.askForTwoEmployees(spaceId);
         print("zarezerwowal" + std::to_string(mechanicsForHardJob.at(0)->getId()) + " oraz " + std::to_string(mechanicsForHardJob.at(1)->getId()));
         manager.getMutex().unlock();
-        state = State::repairing;
+        state = State::repairing_H;
         print("naprawia sie");
         wait();
         print("juz sie naprawil");
@@ -150,7 +150,24 @@ void Car::repairProcess()
 
 void Car::wait()
 {
-    int delayCounter = Random().randomInt(100, 150);
+    int delayCounter;
+    switch (state)
+    {
+    case State::diagnosing:
+        delayCounter = Random().randomInt(0, 150);
+        break;
+    case State::waitingForParts:
+        delayCounter = Random().randomInt(50, 300);
+        break;
+    case State::repairing:
+        delayCounter = Random().randomInt(100, 150);
+        break;
+    case State::repairing_H:
+        delayCounter = Random().randomInt(200, 400);
+        break;
+    default:
+        delayCounter = 0;
+    }
 
     for (int i = 0; i <= delayCounter; i++)
     {
@@ -186,6 +203,8 @@ std::string Car::getStateString() const
         return "Wait for Mech.";
     case State::repairing:
         return "Reparing ...";
+    case State::repairing_H:
+        return "Reparing(H) ...";
     case State::ready:
         return "Ready";
     default:
