@@ -6,9 +6,6 @@
 
 class WorkshopSetup
 {
-private:
-    std::atomic<bool> status{false};
-
 public:
     Horn hornSound;
     Priority priority;

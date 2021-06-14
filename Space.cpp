@@ -3,5 +3,4 @@
 
 Space::Space(int id) : id(id)
 {
-    // std::cout << "ZROBILEM SPACE!" << std::endl;
 }

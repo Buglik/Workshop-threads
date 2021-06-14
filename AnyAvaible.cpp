@@ -4,7 +4,6 @@
 void AnyAvaible::wait()
 {
     std::unique_lock<std::mutex> lock(mutex);
-    // std::cout << counter << std::endl;
     while (counter == 0)
     {
         cv.wait(lock);

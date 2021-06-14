@@ -3,7 +3,6 @@
 
 Manager::Manager(Workshop &workshop) : workshop(workshop)
 {
-    // std::cout << "ZROBILEM Menagera!" << std::endl;
 }
 
 Mechanic *Manager::askForEmployee()
@@ -15,13 +14,9 @@ Mechanic *Manager::askForEmployee()
         {
             if (worker->getMutex().try_lock())
             {
-                worker->setIsBusy(true);
+                // worker->setIsBusy(true);
                 workshop.getSetup().anyAvaible.decAnyAvaible();
-                // std::cout << "Manager przypisuje mechanika" << std::to_string(worker->getId()) << std::endl;
-
                 return worker;
-                // mechanicsIds.push_back(worker->getId());
-                // break;
             }
         }
     }
@@ -38,7 +33,7 @@ std::vector<Mechanic *> Manager::askForTwoEmployees(int spaceId)
         {
             if (worker->getMutex().try_lock())
             {
-                worker->setIsBusy(true);
+                // worker->setIsBusy(true);
                 workshop.getSetup().anyAvaible.decAnyAvaible();
                 twoWorkers.push_back(worker);
                 workshop.getSpaces().at(spaceId)->addMechanic(worker->getId());

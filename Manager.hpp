@@ -18,5 +18,4 @@ public:
 
     Mechanic *askForEmployee();
     std::vector<Mechanic *> askForTwoEmployees(int spaceId);
-    void freeEmployee(Mechanic *mechanic);
 };

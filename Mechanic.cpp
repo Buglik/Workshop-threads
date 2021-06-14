@@ -1,7 +1,6 @@
 #include "Mechanic.hpp"
 #include "iostream"
 
-Mechanic::Mechanic(int id) : id(id), isBusy(false)
+Mechanic::Mechanic(int id) : id(id)
 {
-    // std::cout << "ZROBILEM Mechanic!" << std::endl;
 }

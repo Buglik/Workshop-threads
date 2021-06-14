@@ -23,7 +23,6 @@ public:
     std::vector<Space *> &getSpaces();
     std::vector<Mechanic *> &getMechanics();
     WorkshopSetup &getSetup();
-    std::vector<int> assignMechanics(int n);
     bool getIsOpen() const;
     void open();
     void close();

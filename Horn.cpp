@@ -7,7 +7,6 @@ void Horn::wait()
     {
         cv.wait(lock);
     }
-    // go = false;
 }
 
 void Horn::letEveryoneKnowOut()

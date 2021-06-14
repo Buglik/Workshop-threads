@@ -1,9 +1,6 @@
 #pragma once
 #include <mutex>
-#include <atomic>
-#include "Horn.hpp"
 #include <vector>
-// #include "SpaceState.hpp"
 
 class Space
 {
@@ -13,7 +10,6 @@ private:
     int repairType = -1;
     int carId = -1;
     std::vector<int> mechanics;
-    // std::atomic<SpaceState> state;
 
 public:
     Space(int id);
@@ -64,11 +60,5 @@ public:
         carId = -1;
         repairType = -1;
         removeMechanics();
-        //status = free ?
     }
-
-    // SpaceState getSpaceState()
-    // {
-    //     return state;
-    // }
 };

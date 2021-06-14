@@ -7,7 +7,7 @@ class AnyAvaible
 private:
     std::mutex mutex;
     std::condition_variable cv;
-    int counter = 9; //TODO THATS AMOUNT OF MECHANICS
+    int counter = 15; //TODO THATS AMOUNT OF MECHANICS
 
 public:
     void wait();

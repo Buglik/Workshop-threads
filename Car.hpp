@@ -19,7 +19,6 @@ private:
     std::atomic<State> state;
     std::atomic<int> spaceId;
     std::vector<int> currentMechanicsIds;
-    float speedRatio;
 
 public:
     Car(int id, std::string n, Workshop &ws, Manager &m);
