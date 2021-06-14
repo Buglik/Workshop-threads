@@ -16,7 +16,7 @@ void Workshop::prepareSpaces()
 
 void Workshop::prepareMechanics()
 {
-    for (size_t i = 0; i < amount; i++)
+    for (size_t i = 0; i < amount - 1; i++)
     {
         mechanicV.push_back(new Mechanic(i));
     }

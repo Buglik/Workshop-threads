@@ -29,7 +29,6 @@ void Car::run()
     // std::cout << "Car " << id << "sobie zyje" << std::endl;
     wait();
     getIntoWorkshop();
-    wait();
     repairProcess();
     leaveWorkshop();
 
@@ -49,12 +48,15 @@ void Car::getIntoWorkshop()
 {
     do
     { // try to get space
+
         for (auto &space : workshop.getSpaces())
         {
             if (space->getMutex().try_lock())
             {
                 workshop.getSetup().hornSound.letEveryoneKnowIn();
+
                 spaceId = space->getId();
+                workshop.getSpaces().at(spaceId)->setCarId(id);
                 print("zablokowalem stanowisko " + std::to_string(spaceId));
                 state = State::inPosition;
                 break;
@@ -74,9 +76,10 @@ void Car::getIntoWorkshop()
 void Car::leaveWorkshop()
 {
     print("FINITO");
+    state = State::ready;
     print("puszczam stanowisko " + std::to_string(spaceId));
+    workshop.getSpaces().at(spaceId)->resetSpace();
     workshop.getSpaces().at(spaceId)->getMutex().unlock();
-    state = State::waiting;
     spaceId = -1;
     // print("uzywam horna");
     // go out with horn
@@ -99,19 +102,25 @@ void Car::repairProcess()
     manager.getMutex().lock();
     Mechanic *mechanicForCheckup = manager.askForEmployee();
     manager.getMutex().unlock();
+    workshop.getSpaces().at(spaceId)->addMechanic(mechanicForCheckup->getId());
     // currentMechanicsIds = workshop.assignMechanics(1);
 
     print("biore pracownika" + std::to_string(mechanicForCheckup->getId()));
     // print(std::to_string(workshop.getSetup().anyAvaible.getCounter()));
     // random type of repair
-    int repairType = Random().randomInt(0, 100);
+    int repairType = Random().randomInt(0, 100) % 2;
     // int repairType = 2;
-    if (repairType % 2 == 0) //hard one
+    workshop.getSpaces().at(spaceId)->setRepairType(repairType);
+    if (repairType == 0) //hard one
     {
         // if hard one
+        state = State::diagnosing;
+
+        wait();
         print("hard one");
         //free the one employee
         mechanicForCheckup->getMutex().unlock();
+        workshop.getSpaces().at(spaceId)->removeMechanics();
         // print(std::to_string(workshop.getSetup().anyAvaible.getCounter()));
         workshop.getSetup().anyAvaible.incAnyAvaible();
         // std::cout << "Mechanik " << mechanicForCheckup->getId() << " zamowil czesci" << std::endl;
@@ -121,6 +130,7 @@ void Car::repairProcess()
         wait();
 
         print("oczekuje na naprawe (czesci juz sa)");
+        state = State::waitingForMechanics;
         //let know cv that there is priority
         workshop.getSetup().priority.incPriority();
         //get two employees
@@ -128,11 +138,10 @@ void Car::repairProcess()
         print(std::to_string(workshop.getSetup().anyAvaible.getCounter()));
         workshop.getSetup().anyAvaible.wait();
         manager.getMutex().lock();
-        std::vector<Mechanic *> mechanicsForHardJob = manager.askForTwoEmployees();
+        std::vector<Mechanic *> mechanicsForHardJob = manager.askForTwoEmployees(spaceId);
         print("zarezerwowal" + std::to_string(mechanicsForHardJob.at(0)->getId()) + " oraz " + std::to_string(mechanicsForHardJob.at(1)->getId()));
         // std::cout << std::to_string(mechanicsForHardJob.size()) << std::endl;
         manager.getMutex().unlock();
-        //repair
         state = State::repairing;
         print("naprawia sie");
         wait();
@@ -144,9 +153,12 @@ void Car::repairProcess()
             workshop.getSetup().anyAvaible.incAnyAvaible();
             print("zwolnil" + std::to_string(m->getId()));
         }
+        workshop.getSpaces().at(spaceId)->removeMechanics();
     }
     else
     {
+        state = State::diagnosing;
+        wait();
         // else repair (employee got earlier)
         state = State::repairing;
         print("naprawiam sie");
@@ -158,6 +170,7 @@ void Car::repairProcess()
         // std::cout << "Mechanik " << mechanicForCheckup->getId() << " skonczyl robote" << std::endl;
         mechanicForCheckup->getMutex().unlock();
         workshop.getSetup().anyAvaible.incAnyAvaible();
+        workshop.getSpaces().at(spaceId)->removeMechanics();
     }
 }
 
@@ -192,15 +205,17 @@ std::string Car::getStateString() const
     case State::waiting:
         return "waiting";
     case State::inPosition:
-        return "inPosition";
+        return "In workshop";
+    case State::diagnosing:
+        return "Diagnosing";
     case State::waitingForParts:
-        return "waitingForParts";
+        return "Wait for Parts";
     case State::waitingForMechanics:
-        return "waitingForMechanics";
+        return "Wait for Mechanic";
     case State::repairing:
-        return "repairing";
+        return "Reparing ...";
     case State::ready:
-        return "ready";
+        return "Ready";
     default:
         return "no state";
     }

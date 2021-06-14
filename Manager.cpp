@@ -27,7 +27,7 @@ Mechanic *Manager::askForEmployee()
     }
 }
 
-std::vector<Mechanic *> Manager::askForTwoEmployees()
+std::vector<Mechanic *> Manager::askForTwoEmployees(int spaceId)
 {
     std::vector<Mechanic *> twoWorkers;
     while (twoWorkers.size() < 2)
@@ -41,6 +41,7 @@ std::vector<Mechanic *> Manager::askForTwoEmployees()
                 worker->setIsBusy(true);
                 workshop.getSetup().anyAvaible.decAnyAvaible();
                 twoWorkers.push_back(worker);
+                workshop.getSpaces().at(spaceId)->addMechanic(worker->getId());
             }
             if (twoWorkers.size() == 2)
             {
