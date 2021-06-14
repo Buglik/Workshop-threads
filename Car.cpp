@@ -142,9 +142,12 @@ void Car::repairProcess()
         wait();
         print("juz sie naprawilem");
         // mechanicForCheckup->setIsBusy(false);
+        state = State::ready;
+        manager.getMutex().lock();
         mechanicForCheckup->getMutex().unlock();
         workshop.getSetup().anyAvaible.incAnyAvaible();
         workshop.getSpaces().at(spaceId)->removeMechanics();
+        manager.getMutex().unlock();
     }
 }
 
