@@ -12,20 +12,24 @@ void AnyAvaible::wait()
 
 void AnyAvaible::incAnyAvaible()
 {
-    std::unique_lock<std::mutex> lock(mutex);
-    counter++;
+    {
+        std::lock_guard<std::mutex> lock(mutex);
+        counter++;
+    }
     cv.notify_all();
 }
 
 void AnyAvaible::decAnyAvaible()
 {
-    std::unique_lock<std::mutex> lock(mutex);
-    counter--;
+    {
+        std::lock_guard<std::mutex> lock(mutex);
+        counter--;
+    }
     cv.notify_all();
 }
 
 void AnyAvaible::setCount(int n)
 {
-    std::unique_lock<std::mutex> lock(mutex);
+    std::lock_guard<std::mutex> lock(mutex);
     counter = n;
 }

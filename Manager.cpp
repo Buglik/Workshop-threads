@@ -7,6 +7,7 @@ Manager::Manager(Workshop &workshop) : workshop(workshop)
 
 Mechanic *Manager::askForEmployee()
 {
+    std::lock_guard<std::mutex> lock(mutex);
     while (true)
     {
         workshop.getSetup().anyAvaible.wait();
@@ -24,6 +25,7 @@ Mechanic *Manager::askForEmployee()
 
 std::vector<Mechanic *> Manager::askForTwoEmployees(int spaceId)
 {
+    std::lock_guard<std::mutex> lock(mutex);
     std::vector<Mechanic *> twoWorkers;
     while (twoWorkers.size() < 2)
     {

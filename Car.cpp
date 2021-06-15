@@ -87,9 +87,9 @@ void Car::repairProcess()
     workshop.getSetup().priority.wait();
     print("... there is no priority");
 
-    manager.getMutex().lock();
+    // manager.getMutex().lock();
     Mechanic *mechanicForCheckup = manager.askForEmployee();
-    manager.getMutex().unlock();
+    // manager.getMutex().unlock();
     workshop.getSpaces().at(spaceId)->addMechanic(mechanicForCheckup->getId());
 
     print("biore pracownika" + std::to_string(mechanicForCheckup->getId()));
@@ -117,10 +117,10 @@ void Car::repairProcess()
         //get two employees
         //check if if any free
         workshop.getSetup().anyAvaible.wait();
-        manager.getMutex().lock();
+        // manager.getMutex().lock();
         std::vector<Mechanic *> mechanicsForHardJob = manager.askForTwoEmployees(spaceId);
         print("zarezerwowal" + std::to_string(mechanicsForHardJob.at(0)->getId()) + " oraz " + std::to_string(mechanicsForHardJob.at(1)->getId()));
-        manager.getMutex().unlock();
+        // manager.getMutex().unlock();
         state = State::repairing_H;
         print("naprawia sie");
         wait();
@@ -164,6 +164,9 @@ void Car::wait()
         break;
     case State::repairing_H:
         delayCounter = Random().randomInt(200, 400);
+        break;
+    case State::ready:
+        delayCounter = Random().randomInt(20, 50);
         break;
     default:
         delayCounter = 0;

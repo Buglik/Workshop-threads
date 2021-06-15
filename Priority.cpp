@@ -11,14 +11,18 @@ void Priority::wait()
 
 void Priority::incPriority()
 {
-    std::unique_lock<std::mutex> lock(mutex);
-    counter++;
+    {
+        std::lock_guard<std::mutex> lock(mutex);
+        counter++;
+    }
     cv.notify_all();
 }
 
 void Priority::decPriority()
 {
-    std::unique_lock<std::mutex> lock(mutex);
-    counter--;
+    {
+        std::lock_guard<std::mutex> lock(mutex);
+        counter--;
+    }
     cv.notify_all();
 }
